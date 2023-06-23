@@ -13,15 +13,13 @@ export const consultUsers = async (req: Request, res: Response) => {
 
 export const saveUsers = async(req: Request, res: Response) => {
 
-    const{username: username, password, idRol} = req.body;
+    const {username, password, idRol} = req.body;
     
 
-    const user = await User.create({
-        username: username,
-        password: password,
-        idRol: idRol
-    })
     console.log('Username recibido:', username);
+    const user = await User.create({
+        username, password, idRol
+    })
     
 
     res.status(200).json({
