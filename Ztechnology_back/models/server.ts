@@ -3,6 +3,8 @@ import cors from 'cors';
 
 import {db} from '../db/connection'
 import userRoutes from '../routes/users'
+import clientsRoutes from '../routes/clients'
+import quotesRoutes from '../routes/quotes'
 
 
 class Server {
@@ -46,6 +48,8 @@ class Server {
      
      routes(){
         this.app.use(this.apiPaths.users, userRoutes)
+        this.app.use(this.apiPaths.clients, clientsRoutes)
+        this.app.use(this.apiPaths.quotes, quotesRoutes)
      }
 
      listen(){

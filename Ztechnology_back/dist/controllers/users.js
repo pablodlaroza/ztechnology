@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveUsers = exports.consultUsers = void 0;
+exports.deleteUser = exports.updateUser = exports.saveUsers = exports.consultUsers = void 0;
 const users_1 = __importDefault(require("../models/users"));
 const consultUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield users_1.default.findAll();
@@ -23,15 +23,39 @@ const consultUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.consultUsers = consultUsers;
 const saveUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username: username, password, idRol } = req.body;
+    const { username, password, idRol, state } = req.body;
+    console.log('Username Registrado:', username);
     const user = yield users_1.default.create({
-        username: username,
-        password: password,
-        idRol: idRol
+        username, password, idRol, state
     });
-    console.log('Username recibido:', username);
     res.status(200).json({
         msg: `Se ha registrado un usuario con el id: ${user.dataValues.id}`
     });
 });
 exports.saveUsers = saveUsers;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, username, password, idRol, state } = req.body;
+    console.log(req.body);
+    const user = yield users_1.default.update({ username, password, idRol, state }, {
+        where: {
+            id
+        }
+    });
+    res.status(200).json({
+        msg: `el usuario con el id ${id} ha sido actualizado`
+    });
+});
+exports.updateUser = updateUser;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(req.body);
+    yield users_1.default.destroy({
+        where: {
+            id
+        }
+    });
+    res.status(200).json({
+        msg: `el usuario con el id ${id} ha sido eliminado`
+    });
+});
+exports.deleteUser = deleteUser;

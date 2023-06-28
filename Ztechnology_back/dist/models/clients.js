@@ -2,18 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = require("../db/connection");
-const User = connection_1.db.define('users', {
-    username: {
+const Clients = connection_1.db.define('clients', {
+    names: {
         type: sequelize_1.DataTypes.STRING
     },
-    password: {
+    last_names: {
         type: sequelize_1.DataTypes.STRING
     },
-    idRol: {
-        type: sequelize_1.DataTypes.BIGINT
+    email: {
+        type: sequelize_1.DataTypes.STRING
     },
-    state: {
-        type: sequelize_1.DataTypes.BOOLEAN
+    adress: {
+        type: sequelize_1.DataTypes.STRING
+    },
+    phone: {
+        type: sequelize_1.DataTypes.STRING
     }
 });
-exports.default = User;
+exports.default = Clients;

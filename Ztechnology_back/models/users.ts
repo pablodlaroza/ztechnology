@@ -11,9 +11,14 @@ const User = db.define ('users', {
     },
     idRol: {
         type: DataTypes.BIGINT
+    },
+    state: {
+        type: DataTypes.BOOLEAN
     }
 
 
 });
+
+
 
 export default User;
