@@ -5,6 +5,8 @@ import {db} from '../db/connection'
 import userRoutes from '../routes/users'
 import clientsRoutes from '../routes/clients'
 import quotesRoutes from '../routes/quotes'
+import productRoutes from '../routes/products'
+import rolesRoutes from '../routes/roles'
 
 
 class Server {
@@ -13,7 +15,6 @@ class Server {
     private apiPaths ={
         users: '/api/users',
         clients: '/api/clients',
-        discounts: '/api/discounts',
         products: '/api/products',
         quotes: '/api/quotes',
         roles: '/api/roles',
@@ -43,6 +44,8 @@ class Server {
      middlewares(){
          this.app.use(express.json())
          this.app.use(cors())
+         //Configurar la carpeta static
+         this.app.use('/uploads', express.static('static'))
          
      }
      
@@ -50,6 +53,8 @@ class Server {
         this.app.use(this.apiPaths.users, userRoutes)
         this.app.use(this.apiPaths.clients, clientsRoutes)
         this.app.use(this.apiPaths.quotes, quotesRoutes)
+        this.app.use(this.apiPaths.products, productRoutes)
+        this.app.use(this.apiPaths.roles, rolesRoutes)
      }
 
      listen(){

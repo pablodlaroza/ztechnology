@@ -1,8 +1,13 @@
 import { Request,Response } from "express";
 import User from "../models/users";
+import Role from "../models/roles";
 
 export const consultUsers = async (req: Request, res: Response) => {
-    const users = await User.findAll();
+    const users = await User.findAll({
+        include: [{
+            model: Role
+        }]
+    });
 
     res.status(200).json({
         msg:'Usuarios',

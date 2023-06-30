@@ -1,5 +1,6 @@
 import {DataTypes} from 'sequelize'
 import { db } from '../db/connection'
+import Role from './roles';
 
 const User = db.define ('users', {
   
@@ -19,6 +20,8 @@ const User = db.define ('users', {
 
 });
 
-
+User.belongsTo(Role,{
+    foreignKey: 'idRol'
+})
 
 export default User;

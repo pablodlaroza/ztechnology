@@ -14,7 +14,12 @@ export const consultClients = async (req: Request, res: Response) => {
 export const saveClients = async(req: Request, res: Response) => {
 
     const {names, last_names, email, adress, phone} = req.body;
+
     
+    // const {body} = req;
+    // body.photo = req.file ?.filename
+    // body.idRol = 2
+    // const client = Clients.create(body)
 
     console.log('Cliente Registrado:', names);
     const clients = await Clients.create({
