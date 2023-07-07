@@ -37,7 +37,8 @@ export const updateClient = async(req: Request, res: Response) => {
     const {id, names, last_names, email, adress, phone} = req.body;
     console.log(req.body)
 
-    const client = await Clients.update({ names, last_names, email, adress, phone},{
+    const client = await Clients.update(
+        { names, last_names, email, adress, phone},{
         where:{
             id
         }

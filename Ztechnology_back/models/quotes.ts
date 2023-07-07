@@ -1,26 +1,27 @@
 import {DataTypes} from 'sequelize'
 import { db } from '../db/connection'
+import Clients from './clients';
+import User from './users';
 
 const Quotes = db.define ('quotes', {
-  
+    quoteNumber: {
+        type: DataTypes.STRING
+    },
     description: {
         type: DataTypes.STRING
     },
-    idSeller: {
-        type: DataTypes.BIGINT
+    nombre_asesor: {
+        type: DataTypes.STRING
     },
-    idDiscount: {
-        type: DataTypes.BIGINT
+    nombre_cliente: {
+        type: DataTypes.STRING
     },
     shipping_cost: {
-        type: DataTypes.DECIMAL
+        type: DataTypes.STRING
     },
     total : {
-        type: DataTypes.DECIMAL
+        type: DataTypes.STRING
     }
-  
-
-
 });
 
 export default Quotes;

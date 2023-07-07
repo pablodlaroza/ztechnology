@@ -6,18 +6,20 @@ import userRoutes from '../routes/users'
 import clientsRoutes from '../routes/clients'
 import quotesRoutes from '../routes/quotes'
 import productRoutes from '../routes/products'
-import rolesRoutes from '../routes/roles'
+import authRoutes from '../routes/auth'
+
 
 
 class Server {
     private app: Application;
     private port: string | undefined ;
     private apiPaths ={
+        auth: '/api/auth',
         users: '/api/users',
         clients: '/api/clients',
         products: '/api/products',
         quotes: '/api/quotes',
-        roles: '/api/roles',
+        
 
     }
 
@@ -50,11 +52,12 @@ class Server {
      }
      
      routes(){
+        this.app.use(this.apiPaths.auth, authRoutes);
         this.app.use(this.apiPaths.users, userRoutes)
         this.app.use(this.apiPaths.clients, clientsRoutes)
         this.app.use(this.apiPaths.quotes, quotesRoutes)
         this.app.use(this.apiPaths.products, productRoutes)
-        this.app.use(this.apiPaths.roles, rolesRoutes)
+        
      }
 
      listen(){

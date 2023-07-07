@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import Products from "../models/products"
 
 export const consultProducts = async (req: Request, res: Response) => {
-    const products = await Products.findAll({
-        attributes: ['name', 'description', 'price']
-    });
+    const products = await Products.findAll();
 
     res.status(200).json({
         msg:'Productos',

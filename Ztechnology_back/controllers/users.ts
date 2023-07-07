@@ -1,13 +1,9 @@
 import { Request,Response } from "express";
 import User from "../models/users";
-import Role from "../models/roles";
+
 
 export const consultUsers = async (req: Request, res: Response) => {
-    const users = await User.findAll({
-        include: [{
-            model: Role
-        }]
-    });
+    const users = await User.findAll();
 
     res.status(200).json({
         msg:'Usuarios',
@@ -35,7 +31,7 @@ export const saveUsers = async(req: Request, res: Response) => {
 
 export const updateUser = async(req: Request, res: Response) => {
     const {id, username, password, idRol, state} = req.body;
-    console.log(req.body)
+    // console.log(req.body)
 
     const user = await User.update({username,password, idRol, state},{
         where:{

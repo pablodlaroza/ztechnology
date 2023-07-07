@@ -11,14 +11,16 @@ const UserProvider = ({ children }) => {
       try {
         const response = await axios.get('http://localhost:3000/api/users/consultUsers');
         setData(response.data.users);
-        
       } catch (error) {
         console.log(error);
       }
     };
+    
 
     fetchData();
+
   }, []);
+  
 
   return (
     <UserContext.Provider value={{ data, setCurrentUser, currentUser }}>

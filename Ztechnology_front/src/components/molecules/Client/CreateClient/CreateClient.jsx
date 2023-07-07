@@ -99,14 +99,14 @@ export default function CreateClient( {load, setLoad}) {
             /* and other goodies */
           }) => (
             <form onSubmit={handleSubmit}>
-              <DialogTitle>{"Crear Nuevo Usuario"}</DialogTitle>
+              <DialogTitle>{"Crear Nuevo Cliente"}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
 
                   <TextField
                     sx={{ mt: 1 }}
                     fullWidth
-                    id="outlined-basic"
+                    id="outlined-b"
                     name='names'
                     label="Nombres"
                     variant="outlined"
@@ -118,7 +118,7 @@ export default function CreateClient( {load, setLoad}) {
                   <TextField
                     sx={{ mt: 3 }}
                     fullWidth
-                    id="outlined-basic"
+                    id="outlined-ba"
                     name='last_names'
                     label="Apellidos"
                     variant="outlined"
@@ -130,7 +130,7 @@ export default function CreateClient( {load, setLoad}) {
                   <TextField
                     sx={{ mt: 3 }}
                     fullWidth
-                    id="outlined-basic"
+                    id="outlined-bas"
                     name='email'
                     label="Correo Electronico"
                     variant="outlined"
@@ -142,7 +142,7 @@ export default function CreateClient( {load, setLoad}) {
                     <TextField
                     sx={{ mt: 3 }}
                     fullWidth
-                    id="outlined-basic"
+                    id="outlined-basi"
                     name='phone'
                     label="Telefono"
                     type='number'

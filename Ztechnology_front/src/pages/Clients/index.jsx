@@ -18,7 +18,7 @@ export default function Clients() {
       
         <Container maxWidth='lg' sx={{mt:5}}>
           <CreateClient load={load} setLoad={setLoad}/>
-          <ListClient load={load}/>
+          <ListClient load={load} setLoad= {setLoad}/>
         </Container>
         </>
       );

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import Quotes from "../models/quotes";
+import Clients from "../models/clients";
 
 export const consultQuotes = async (req: Request, res: Response) => {
-    const quotes = await Quotes.findAll({
-        attributes: ['description', 'idSeller', 'idDiscount', 'shipping_cost', 'total']
-    });
+    const quotes = await Quotes.findAll(
+    );
 
     res.status(200).json({
         msg:'Cotizaciones',

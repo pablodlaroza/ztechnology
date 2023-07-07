@@ -11,13 +11,24 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import ChangePassword from '../../../pages/ChangePassword';
 
 const pages = ['Usuarios', 'Cotizaciones', 'Productos', 'Clientes'];
-const settings = ['Perfil', 'Cuenta', 'Dashboard', 'Cerrar Sesion'];
+const settings = ['Perfil', 'Cambiar Contraseña', 'Cerrar Sesion'];
+
 
 function ResponsiveAppBar() {
+
+  const {state} = useLocation()
+  
+
+
+  
+  const userString = localStorage.getItem('user');
+  const user = userString ? JSON.parse(userString) : null;
+
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -36,7 +47,13 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem('username') 
+
+  }
+
   return (
+    <>
     <AppBar position="static" sx={{backgroundColor: '#222'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -44,8 +61,8 @@ function ResponsiveAppBar() {
           <Typography
             variant="h4"
             noWrap
-            component="a"
-            href="/home"
+            component={Link}
+            to="/home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -58,6 +75,8 @@ function ResponsiveAppBar() {
           >
             ZT
           </Typography>
+            
+          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -70,6 +89,8 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
+
+            
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -88,12 +109,18 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu} component = {Link}
-                to= {page}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+             
+
+              
+             
+
+                  {pages.map((page) => (
+                    <MenuItem  key={page} onClick={handleCloseNavMenu} component = {Link}
+                    to= {page}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  ))}
+                
             </Menu>
           </Box>
 
@@ -101,8 +128,8 @@ function ResponsiveAppBar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href=""
+            component= {Link}
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -117,51 +144,84 @@ function ResponsiveAppBar() {
             ZT
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                component = {Link}
-                to= {page}
-              >
-                {page}
-              </Button>
-            ))}
+            
+              
+                {pages.map((page) => (
+                  <Button
+                    key={page}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    component = {Link}
+                    to= {page}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              
+            
           </Box>
+        
+          
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <h6 style={{marginRight:10}}>{user.username}</h6>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="Remy Sharp" src="" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+            
+                  {settings.map((setting) => (
+                        <MenuItem
+                          key={setting}
+                          onClick={() => {
+                            if (setting === 'Cerrar Sesion') {
+                              handleLogOut();
+                              navigate('/login', { replace: true });
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                            } else if (setting === 'Cambiar Contraseña') {
+                              navigate('/change-password')
+                              handleCloseUserMenu();
+                            }else{
+                              handleCloseUserMenu();
+
+                            }
+                          }}
+                        >
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      ))}
+                  
+                </Menu>
+              </Box>
+          </div>
+        
+            
+        
+        
+          
+             
         </Toolbar>
       </Container>
     </AppBar>
+    <Outlet/>
+    </>
   );
 }
 export default ResponsiveAppBar;
