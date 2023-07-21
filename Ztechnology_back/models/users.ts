@@ -1,5 +1,6 @@
 import {DataTypes} from 'sequelize'
 import { db } from '../db/connection'
+import Role from './roles';
 
 const User = db.define ('users', {
   
@@ -14,10 +15,19 @@ const User = db.define ('users', {
     },
     state: {
         type: DataTypes.BIGINT
+    },
+    loginAttempts: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+    },
+    blockedUntil: {
+        type: DataTypes.DATE
     }
 
-
 });
+        User.belongsTo(Role,{
+            foreignKey: 'idRol'
+        })
 
 
 

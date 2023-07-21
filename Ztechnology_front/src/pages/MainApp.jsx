@@ -9,36 +9,36 @@ import Quotes from './Quotes';
 import Products from './Products';
 import ResponsiveAppBar from '../components/molecules/ResponsiveAppBar/ResponsiveAppBar';
 import ChangePassword from './ChangePassword';
+import '../App.css'
 // import { UserContext } from '../context/';
 
 
 function MainApp() {
   
-  const [isLoading, setIsLoading] = useState(true);
   
 
-
+  const [loggedIn, setLoggedIn] = useState(false)
   const [pathName , setPathName] = useState('')
 
   useEffect(() => {
-  
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
     setPathName(window.location.pathname)
-    console.log(pathName)
+    console.log(pathName) 
   }, [pathName]);
+
+  const loggedINN = localStorage.getItem('loggedIn');
   
 
   return (
-    <>
+    <div className='background' >
       
       <BrowserRouter>
         <UserProvider>
        
             <Routes>
-            <Route path="/login" element={<LoginApp />} />
-              <Route path='/' element={<ResponsiveAppBar />}>
+            <Route className='login' path="/login" element={<LoginApp setLoggedIn={setLoggedIn}/>} />
+            {loggedINN && (
+          
+              <Route path='/' element={<ResponsiveAppBar setLoggedIn={setLoggedIn}/>}>
                   <Route path="/change-password" element={<ChangePassword />} />
                   <Route path="/home" element={<Home />} />
                   <Route path="/Usuarios" element={<Users />} />
@@ -46,11 +46,12 @@ function MainApp() {
                   <Route path="/Productos" element={<Products />} />
                   <Route path="/Clientes" element={<Clients />} />
               </Route>
+            )}
             </Routes>
           
         </UserProvider>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

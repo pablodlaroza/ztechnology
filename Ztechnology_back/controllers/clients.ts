@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import Clients from "../models/clients";
 
 export const consultClients = async (req: Request, res: Response) => {
@@ -9,6 +10,20 @@ export const consultClients = async (req: Request, res: Response) => {
         clients
     })
     
+}
+export const consultClientById = async(req: Request, res: Response) => {
+    const {id} = req.params;
+    const client = await Clients.findByPk(id)
+
+    if (client){
+        res.status(200).json({
+            client
+        })
+    }else{
+        res.status(400).json({
+            msg: 'el usuario no existe'
+        }) 
+    }
 }
 
 export const saveClients = async(req: Request, res: Response) => {

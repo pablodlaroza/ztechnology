@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid';
-import { consultClients , saveClients, updateClient, deleteClient} from "../controllers/clients";
+import { consultClients , saveClients, updateClient, deleteClient, consultClientById} from "../controllers/clients";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,6 +18,8 @@ const storage = multer.diskStorage({
 const router = Router()
 
 router.get('/consultClients', consultClients)
+router.get('/consultClients/:id', consultClientById)
+
 router.post('/saveClients',upload.single('file'), saveClients)
 router.put('/updateClient', updateClient)
 router.delete('/deleteClient/:id', deleteClient)

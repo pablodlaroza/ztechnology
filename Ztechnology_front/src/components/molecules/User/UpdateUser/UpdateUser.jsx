@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import bcrypt from 'bcryptjs'; // Importa la biblioteca bcryptjs
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios'
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import Button from '@mui/material/Button';
 
-export default function CreateUserr( {load, setLoad}) {
+
+
+function UpdateUser({ idUpdate, load, setLoad }) {
   const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -26,54 +27,57 @@ export default function CreateUserr( {load, setLoad}) {
     setOpen(false);
   };
 
+  const consultUserById = async (id) => {
+    const response = await axios.get(`http://localhost:3000/api/users/consultUsers/${id}`);
+    console.log(response.data.user);
+    setFormData(response.data.user);
+  };
+
+  useEffect(() => {
+    if (idUpdate) {
+      consultUserById(idUpdate);
+    }
+    setOpen(idUpdate ? true : false);
+  }, [idUpdate]);
+
   return (
     <div>
-      <Button sx={{ mb: 5 }} variant="outlined" onClick={handleClickOpen}>
-        Crear Usuario
-      </Button>
       <Dialog
         open={open}
-        TransitionComponent={Transition}
-        keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
         <Formik
+        
+          enableReinitialize
           initialValues={{
-            username: '',
+            id: idUpdate,
+            username: formData.username || '',
             password: '',
-            idRol: ''
+            idRol: formData.idRol || '',
           }}
           validationSchema={Yup.object({
+            username: Yup.string().required('Este campo es obligario'),
+            // password: Yup.string().required('Este campo es obligario'),
+            idRol: Yup.string().required('Este campo es obligario'),
+          })}
+          onSubmit={async (values, { setSubmitting }) => {
+            // Encripta la contraseña utilizando bcrypt
+            
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(values.password, salt);
 
-            username: Yup.string()
-  
-              // .max(15, 'Must be 15 characters or less')
-  
-              .required('Este campo es obligatorio'),
+            const updatedUser = {
+              ...values,
+              password: hashedPassword,
+            };
 
-            password: Yup.string()
-            .required('Este campo es obligatorio'),
-
-            idRol: Yup.string()
-            .required('Este campo es obligatorio')
-
-            })}
-
-
-          onSubmit={async(values, { setSubmitting }) => {
-            if (values.idRol.toLowerCase() === 'administrador') {
-              values.idRol = '1';
-            }else{
-              values.idRol = '2';
-            }
-            const response = await axios.post('http://localhost:3000/api/users/saveUser', values)
-            console.log(response)
-            setLoad(!load)
+            const response = await axios.put('http://localhost:3000/api/users/updateUsers', updatedUser);
+            setLoad(!load);
             setOpen(false);
           }}
         >
-    
           {({
             values,
             errors,
@@ -81,19 +85,18 @@ export default function CreateUserr( {load, setLoad}) {
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting
+            isSubmitting,
             /* and other goodies */
           }) => (
             <form onSubmit={handleSubmit}>
-              <DialogTitle>{"Crear Nuevo Usuario"}</DialogTitle>
+              <DialogTitle id="alert-dialog-title">{"Actualiza un usuario"}</DialogTitle>
               <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-
+                <DialogContentText id="alert-dialog-description">
                   <TextField
                     sx={{ mt: 1 }}
                     fullWidth
-                    id="outlined-username"
-                    name='username'
+                    id="outlined-basic"
+                    name="username"
                     label="Username"
                     variant="outlined"
                     onChange={handleChange}
@@ -101,37 +104,44 @@ export default function CreateUserr( {load, setLoad}) {
                     error={errors.username}
                     helperText={errors.username}
                   />
+
                   <TextField
-                  type='password'
                     sx={{ mt: 3 }}
                     fullWidth
-                    id="outlined-password"
-                    name='password'
-                    label="Contraseña"
+                    id="outlined-basi"
+                    name="password"
+                    label="Password"
+                    type="password"
                     variant="outlined"
                     onChange={handleChange}
                     value={values.password}
                     error={errors.password}
                     helperText={errors.password}
+                    disabled={values.idRol =="1"} 
+                    
                   />
-                  <TextField
-                  // type='number'
-                    sx={{ mt: 3 }}
-                    fullWidth
-                    id="outlined-rol"
-                    name='idRol'
-                    label="Rol"
-                    variant="outlined"
-                    onChange={handleChange}
-                    value={values.idRol}
-                    error={errors.idRol}
-                    helperText={errors.idRol}
-                     />
-                 
+
+                <FormControl fullWidth sx={{ mt: 3 }}>
+                  <InputLabel id="rol-label">Seleccione un rol</InputLabel>
+                    <Select
+                      labelId="rol-label"
+                      id="outlined-rol"
+                      name="idRol"
+                      label="Rol"
+                      variant="outlined"
+                      value={values.idRol}
+                      onChange={handleChange}
+                      error={errors.idRol}
+                    >
+                      <MenuItem value="1">Administrador</MenuItem>
+                      <MenuItem value="2">Gestor</MenuItem>
+                    </Select>
+                  {/* {errors.idRol && <TextField error helperText={errors.idRol} />} */}
+                </FormControl>
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button type='submit'>Crear</Button>
+                <Button type="submit">Actualizar</Button>
               </DialogActions>
             </form>
           )}
@@ -140,3 +150,5 @@ export default function CreateUserr( {load, setLoad}) {
     </div>
   );
 }
+
+export default UpdateUser;

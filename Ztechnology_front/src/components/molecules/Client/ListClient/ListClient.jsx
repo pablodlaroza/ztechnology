@@ -14,7 +14,7 @@ import '../../../../pages/Login/css/Root.css'
 
 import axios from 'axios'
 
-function ListClient({load, setLoad}) {
+function ListClient({load, setLoad, setIdUpdate}) {
 
     const [rows, setRows] = useState([])
   
@@ -32,6 +32,9 @@ function ListClient({load, setLoad}) {
       setLoad(!load)
       console.log(response)
     }
+    const handleUpdate = (id) => {
+      setIdUpdate(id);
+    };
 
   return (
     <div>
@@ -80,8 +83,8 @@ function ListClient({load, setLoad}) {
 
                   <TableCell  >
                     {<div  style={{display: 'flex'}}  >
-                      <IconButton color='primary' aria-label="Editar" size="large">
-                        <EditIcon fontSize="inherit" />
+                      <IconButton color="primary" aria-label="Editar" onClick={() => handleUpdate(row.id)}>
+                        <EditIcon />
                       </IconButton>
                       <DeleteButton name= {row.names} id={row.id} onClick={handleDelete}/>
                     </div>}

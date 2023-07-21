@@ -10,6 +10,7 @@ const UserProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/users/consultUsers');
+        // console.log(response)
         setData(response.data.users);
       } catch (error) {
         console.log(error);

@@ -1,20 +1,45 @@
 import { Request,Response } from "express";
+import bcrypt from 'bcryptjs';
 import User from "../models/users";
+import Role from "../models/roles";
 
 
 export const consultUsers = async (req: Request, res: Response) => {
-    const users = await User.findAll();
+    const users = await User.findAll({
+        include: [{
+            model:Role
+        }]
+    });
 
     res.status(200).json({
         msg:'Usuarios',
         users
     })
+
     
+}
+
+export const consultUserById = async(req: Request, res: Response) => {
+    const {id} = req.params;
+    const user = await User.findByPk(id)
+
+    if (user){
+        res.status(200).json({
+            user
+        })
+    }else{
+        res.status(400).json({
+            msg: 'el usuario no existe'
+        }) 
+    }
 }
 
 export const saveUsers = async(req: Request, res: Response) => {
 
-    const {username, password, idRol,state} = req.body;
+    let {username, password, idRol,state} = req.body;
+    let salt = bcrypt.genSaltSync();
+
+    password = bcrypt.hashSync(password, salt);
     
 
     console.log('Username Registrado:', username);

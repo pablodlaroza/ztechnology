@@ -1,0 +1,6 @@
+body{
+    background-position: center -22px;
+    background-image: url("../src/photos/fondo.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}

@@ -11,6 +11,21 @@ export const consultProducts = async (req: Request, res: Response) => {
     
 }
 
+export const consultProductById = async(req: Request, res: Response) => {
+    const {id} = req.params;
+    const product = await Products.findByPk(id)
+
+    if (product){
+        res.status(200).json({
+            product
+        })
+    }else{
+        res.status(400).json({
+            msg: 'el usuario no existe'
+        }) 
+    }
+}
+
 export const saveProducts = async(req: Request, res: Response) => {
 
     const {name, description, price} = req.body;

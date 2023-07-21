@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,20 +15,16 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ChangePassword from '../../../pages/ChangePassword';
 
 const pages = ['Usuarios', 'Cotizaciones', 'Productos', 'Clientes'];
-const settings = ['Perfil', 'Cambiar Contraseña', 'Cerrar Sesion'];
+const settings = ['Perfil', 'Cambiar Contraseña', 'Cerrar Sesión'];
 
+function ResponsiveAppBar({setLoggedIn}) {
+  const { state } = useLocation();
 
-function ResponsiveAppBar() {
-
-  const {state} = useLocation()
-  
-
-
-  
   const userString = localStorage.getItem('user');
   const user = userString ? JSON.parse(userString) : null;
+  console.log(user.idRol);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -48,122 +44,115 @@ function ResponsiveAppBar() {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem('username') 
+    localStorage.removeItem('user');
+    
+    setLoggedIn(false)
+    localStorage.removeItem('loggedIn');
 
-  }
+
+  };
 
   return (
     <>
-    <AppBar position="static" sx={{backgroundColor: '#222'}}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          
-          <Typography
-            variant="h4"
-            noWrap
-            component={Link}
-            to="/home"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 1000,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            ZT
-          </Typography>
-            
-          
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-
-            
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+      <AppBar position="static" sx={{ backgroundColor: '#222', }}>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <Typography
+              variant="h4"
+              noWrap
+              component={Link}
+              to="/home"
               sx={{
-                display: { xs: 'block', md: 'none' },
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 1000,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
               }}
             >
-             
+              ZT
+            </Typography>
 
-              
-             
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
 
-                  {pages.map((page) => (
-                    <MenuItem  key={page} onClick={handleCloseNavMenu} component = {Link}
-                    to= {page}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  ))}
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
+              >
+            {pages.map((page) => (
+              (user.idRol == 1 ) && (
+                <MenuItem key={page} onClick={handleCloseNavMenu} component={Link} to={page}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              )
+            ))}
+
+              </Menu>
+            </Box>
+
+            <Typography
+              variant="h5"
+              noWrap
+              component={Link}
+              to="/home"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
                 
-            </Menu>
-          </Box>
-
-         
-          <Typography
-            variant="h5"
-            noWrap
-            component= {Link}
-            href="/home"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            ZT
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            
-              
-                {pages.map((page) => (
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              ZT
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map((page) => (
+                (user.idRol == 1 || page !== 'Usuarios') && (
                   <Button
                     key={page}
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'white', display: 'block' }}
-                    component = {Link}
-                    to= {page}
+                    component={Link}
+                    to={page}
                   >
                     {page}
                   </Button>
-                ))}
-              
-            
-          </Box>
-        
-          
+                )
+              ))}
+            </Box>
+
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <h6 style={{marginRight:10}}>{user.username}</h6>
+              <h6 style={{ marginRight: 11, marginTop: '3px' }}>{user.username}</h6>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -186,41 +175,31 @@ function ResponsiveAppBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-            
                   {settings.map((setting) => (
-                        <MenuItem
-                          key={setting}
-                          onClick={() => {
-                            if (setting === 'Cerrar Sesion') {
-                              handleLogOut();
-                              navigate('/login', { replace: true });
-
-                            } else if (setting === 'Cambiar Contraseña') {
-                              navigate('/change-password')
-                              handleCloseUserMenu();
-                            }else{
-                              handleCloseUserMenu();
-
-                            }
-                          }}
-                        >
-                          <Typography textAlign="center">{setting}</Typography>
-                        </MenuItem>
-                      ))}
-                  
+                    <MenuItem
+                      key={setting}
+                      onClick={() => {
+                        if (setting === 'Cerrar Sesión') {
+                          handleLogOut();
+                          navigate('/login', { replace: true });
+                        } else if (setting === 'Cambiar Contraseña') {
+                          navigate('/change-password');
+                          handleCloseUserMenu();
+                        } else {
+                          handleCloseUserMenu();
+                        }
+                      }}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
                 </Menu>
               </Box>
-          </div>
-        
-            
-        
-        
-          
-             
-        </Toolbar>
-      </Container>
-    </AppBar>
-    <Outlet/>
+            </div>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <Outlet />
     </>
   );
 }

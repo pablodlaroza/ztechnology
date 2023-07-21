@@ -28,7 +28,7 @@ export default function CreateProduct( {load, setLoad}) {
 
   return (
     <div>
-      <Button sx={{ mb: 5 }} variant="outlined" onClick={handleClickOpen}>
+      <Button sx={{ mb: 5, ml:48, width:'400px' }}  variant="outlined" onClick={handleClickOpen}>
         Crear Producto
       </Button>
       <Dialog

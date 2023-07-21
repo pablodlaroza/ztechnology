@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button } from '@mui/material';
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
 
 const ChangePasswordForm = () => {
   const userString = localStorage.getItem('user');
@@ -17,7 +18,7 @@ const ChangePasswordForm = () => {
     try {
       const updatedUser = {
         ...user,
-        password: values.newPassword
+        password: await bcrypt.hash(values.newPassword, 10)// factor de costo
       };
 
       const response = await axios.put('http://localhost:3000/api/users/updateUsers', updatedUser);
@@ -49,8 +50,11 @@ const ChangePasswordForm = () => {
         handleSubmit,
         isSubmitting,
       }) => (
-        <form onSubmit={handleSubmit}>
-          <TextField  style={{marginTop: 20}}
+        <form style={{backgroundColor:'white', padding:'20px', marginBottom:'20px', borderRadius:'7px', width:'50%', marginLeft:'450px', marginTop:'220px'}} onSubmit={handleSubmit}>
+           <h1 style={{textAlign:'center', fontWeight:'bolder', marginBottom:'20px'}}>Cambiar Contraseña</h1>
+          <TextField
+            
+            style={{ marginTop: '20px' }}
             fullWidth
             id='oldPassword'
             name='oldPassword'
@@ -64,6 +68,7 @@ const ChangePasswordForm = () => {
             helperText={touched.oldPassword && errors.oldPassword}
           />
           <TextField
+            style={{ marginTop: '20px' }}
             fullWidth
             id='newPassword'
             name='newPassword'
@@ -76,7 +81,7 @@ const ChangePasswordForm = () => {
             error={touched.newPassword && Boolean(errors.newPassword)}
             helperText={touched.newPassword && errors.newPassword}
           />
-          <Button type='submit' disabled={isSubmitting}>
+          <Button style={{ marginTop: '10px' }} type='submit' disabled={isSubmitting}>
             Cambiar contraseña
           </Button>
         </form>

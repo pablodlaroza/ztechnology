@@ -6,7 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+
+
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
@@ -28,7 +30,7 @@ export default function CreateUserr( {load, setLoad}) {
 
   return (
     <div>
-      <Button sx={{ mb: 5 }} variant="outlined" onClick={handleClickOpen}>
+      <Button sx={{ mb: 5, ml:48, width:'400px' }} variant="outlined" onClick={handleClickOpen}>
         Crear Usuario
       </Button>
       <Dialog
@@ -62,6 +64,7 @@ export default function CreateUserr( {load, setLoad}) {
 
 
           onSubmit={async(values, { setSubmitting }) => {
+            
             if (values.idRol.toLowerCase() === 'administrador') {
               values.idRol = '1';
             }else{
@@ -114,19 +117,27 @@ export default function CreateUserr( {load, setLoad}) {
                     error={errors.password}
                     helperText={errors.password}
                   />
-                  <TextField
-                  // type='number'
-                    sx={{ mt: 3 }}
-                    fullWidth
-                    id="outlined-rol"
-                    name='idRol'
-                    label="Rol"
-                    variant="outlined"
-                    onChange={handleChange}
-                    value={values.idRol}
-                    error={errors.idRol}
-                    helperText={errors.idRol}
-                     />
+
+
+                <FormControl fullWidth sx={{ mt: 3 }}>
+                  <InputLabel id="rol-label">Seleccione un rol</InputLabel>
+                    <Select
+                      labelId="rol-label"
+                      id="outlined-rol"
+                      name="idRol"
+                      label="Rol"
+                      variant="outlined"
+                      value={values.idRol}
+                      onChange={handleChange}
+                      error={errors.idRol}
+                    >
+                      <MenuItem value="Administrador">Administrador</MenuItem>
+                      <MenuItem value="Gestor">Gestor</MenuItem>
+                    </Select>
+                  {/* {errors.idRol && <TextField error helperText={errors.idRol} />} */}
+                </FormControl>
+
+
                  
                 </DialogContentText>
               </DialogContent>

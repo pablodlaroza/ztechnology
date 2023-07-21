@@ -14,7 +14,7 @@ import '../../../../pages/Login/css/Root.css'
 
 import axios from 'axios'
 
-function ListProducts({load, setLoad}) {
+function ListProducts({load, setLoad, setIdUpdate}) {
 
     const [rows, setRows] = useState([])
   
@@ -32,6 +32,9 @@ function ListProducts({load, setLoad}) {
       setLoad(!load)
       console.log(response)
     }
+    const handleUpdate = (id) => {
+      setIdUpdate(id);
+    };
 
   return (
     <div>
@@ -74,8 +77,8 @@ function ListProducts({load, setLoad}) {
 
                   <TableCell className='buttons' >
                     {<div  style={{display: 'flex'}}  >
-                      <IconButton color='primary' aria-label="Editar" size="large">
-                        <EditIcon fontSize="inherit" />
+                      <IconButton color="primary" aria-label="Editar" onClick={() => handleUpdate(row.id)}>
+                        <EditIcon />
                       </IconButton>
                       <DeleteButton name= {row.name} id={row.id} onClick={handleDelete}/>
                     </div>}
