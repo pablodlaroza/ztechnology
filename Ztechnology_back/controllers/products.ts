@@ -28,13 +28,13 @@ export const consultProductById = async(req: Request, res: Response) => {
 
 export const saveProducts = async(req: Request, res: Response) => {
 
-    const {name, description, price} = req.body;
+    const {name, description, price, stock} = req.body;
     
 
     console.log('Producto Registrado:', name);
 
     const products = await Products.create({
-        name, description, price
+        name, description, price, stock
     })
     
 

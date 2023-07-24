@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import axios from 'axios';
+import swal from 'sweetalert'
+
 
 function SendQuote({client, quote}) {
 
@@ -16,7 +18,9 @@ function SendQuote({client, quote}) {
   const handleSubmit= async()=>{
    try {
       const response = await axios.post('http://localhost:3000/api/send-email', emailData);
-      alert(`Correo enviado exitosamente a: ${client.email}`,);
+      swal(`Correo enviado exitosamente a: ${client.email}`,'', "success");
+
+      
       // Puedes mostrar una notificación o mensaje de éxito aquí
     } catch (error) {
       console.error('Error al enviar el correo:', error);

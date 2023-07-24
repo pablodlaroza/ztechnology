@@ -11,6 +11,9 @@ const Products = db.define ('products', {
     },
     price: {
         type: DataTypes.DECIMAL
+    },
+    stock: {
+        type: DataTypes.INTEGER
     }
   
 

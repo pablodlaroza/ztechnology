@@ -10,6 +10,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import swal from 'sweetalert'
+
 
 import Button from '@mui/material/Button';
 
@@ -74,6 +76,8 @@ function UpdateQuote({ idUpdate, load, setLoad }) {
           onSubmit={async (values, { setSubmitting }) => {
             values.total = values.total * values.amount
             const response = await axios.put('http://localhost:3000/api/quotes/updateQuotes', values);
+            swal(`Actualizado correctamente`,'', "success");
+
             setLoad(!load);
             setOpen(false);
           }}

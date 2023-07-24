@@ -2,13 +2,18 @@ import { Request,Response } from "express";
 import bcrypt from 'bcryptjs';
 import User from "../models/users";
 import Role from "../models/roles";
+import UserDetails from "../models/userDetails";
 
 
 export const consultUsers = async (req: Request, res: Response) => {
     const users = await User.findAll({
         include: [{
             model:Role
-        }]
+        },
+        {
+            model: UserDetails
+        }
+    ]
     });
 
     res.status(200).json({

@@ -17,6 +17,8 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import swal from 'sweetalert'
+
 
 export default function CreateQuote({ load, setLoad }) {
   const [open, setOpen] = useState(false);
@@ -25,6 +27,10 @@ export default function CreateQuote({ load, setLoad }) {
   const [clients, setClients] = useState([]);
   const [quoteCount, setQuoteCount] = useState(1);
   const [selectedProductPrice, setSelectedProductPrice] = useState(0);
+
+  
+  const userString = localStorage.getItem('user');
+  const user = userString ? JSON.parse(userString) : null;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -76,7 +82,7 @@ export default function CreateQuote({ load, setLoad }) {
     });
     
     if (response) {
-      alert('Cotizacion creada exitosamente');
+      swal(`Cotizacion creada exitosamente `,'', "success");
     }
 
     setLoad(!load);
@@ -201,11 +207,12 @@ export default function CreateQuote({ load, setLoad }) {
                     <MenuItem value="" disabled>
                       Seleccione un Asesor
                     </MenuItem>
-                    {users.map((user) => (
-                      <MenuItem key={user.id} value={user.id.toString()}>
-                        {user.username}
+                    
+                      <MenuItem key={user.id} value={user.user_detail.id.toString()}>
+                        {user.user_detail.names} {user.user_detail.last_names}
+
                       </MenuItem>
-                    ))}
+                  
                   </Select>
                 </FormControl>
               </Grid>

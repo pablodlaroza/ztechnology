@@ -15,7 +15,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ChangePassword from '../../../pages/ChangePassword';
 
 const pages = ['Usuarios', 'Cotizaciones', 'Productos', 'Clientes'];
-const settings = ['Perfil', 'Cambiar Contraseña', 'Cerrar Sesión'];
+const settings = [ 'Cambiar Contraseña', 'Cerrar Sesión'];
 
 function ResponsiveAppBar({setLoggedIn}) {
   const { state } = useLocation();

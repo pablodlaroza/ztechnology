@@ -3,6 +3,7 @@ import { db } from '../db/connection'
 import Clients from './clients';
 import User from './users';
 import Products from './products';
+import UserDetails from './userDetails';
 
 const Quotes = db.define ('quotes', {
     quoteNumber: {
@@ -34,8 +35,10 @@ const Quotes = db.define ('quotes', {
 Quotes.belongsTo(Clients, { foreignKey: 'idClient' });
 Clients.hasMany(Quotes, { foreignKey: 'idClient' });
 
-Quotes.belongsTo(User, { foreignKey: 'idUser' });
-User.hasMany(Quotes, { foreignKey: 'idUser' });
+Quotes.belongsTo(UserDetails, { foreignKey: 'idUser' });
+UserDetails.hasMany(Quotes, { foreignKey: 'idUser' });
+
+
 
 Quotes.belongsTo(Products,{foreignKey: 'idProduct'})
 Products.hasMany(Quotes,{foreignKey: 'idProduct'})//Products puede tener múltiples objetos Quotes.

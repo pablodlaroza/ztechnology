@@ -101,8 +101,9 @@ function ListQuotes({ load, setLoad, setClient, setQuote, setIdUpdate }) {
                   <TableCell>{row.amount}</TableCell>
                   <TableCell>{Number(row.product.price).toLocaleString()}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.user.username}</TableCell>
-                  <TableCell>{row.client.names}</TableCell>
+                  <TableCell>{row.user_detail.names} {row.user_detail.last_names}</TableCell>
+                  
+                  <TableCell>{row.client.names} {row.client.last_names}</TableCell>
                   <TableCell>{Number(row.shipping_cost).toLocaleString()}</TableCell>
                   <TableCell>{Number(row.total - row.shipping_cost).toLocaleString()}</TableCell>
                   <TableCell>{Number(row.total).toLocaleString()}</TableCell>

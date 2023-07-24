@@ -48,6 +48,7 @@ function ListProducts({load, setLoad, setIdUpdate}) {
 
                 <TableCell >Descripcion</TableCell>
                 <TableCell >Precio</TableCell>
+                <TableCell>Stock</TableCell>
               
                 <TableCell >Acciones</TableCell>
 
@@ -72,6 +73,9 @@ function ListProducts({load, setLoad, setIdUpdate}) {
                   </TableCell>
                   <TableCell >
                       {row.price.toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    {row.stock}
                   </TableCell>
                
 

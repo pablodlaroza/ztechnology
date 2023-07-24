@@ -6,6 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import swal from 'sweetalert'
+
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 
@@ -71,7 +73,8 @@ export default function CreateUserr( {load, setLoad}) {
               values.idRol = '2';
             }
             const response = await axios.post('http://localhost:3000/api/users/saveUser', values)
-            console.log(response)
+            swal(`Usuario creado exitosamente`,'', "success");
+
             setLoad(!load)
             setOpen(false);
           }}

@@ -42,7 +42,8 @@ export default function CreateProduct( {load, setLoad}) {
           initialValues={{
             name: '',
             description: '',
-            price: ''
+            price: '',
+            stock: null
             
   
           }}
@@ -129,6 +130,19 @@ export default function CreateProduct( {load, setLoad}) {
                     value={values.price}
                     error={errors.price}
                     helperText={errors.price}
+                     />
+                  <TextField
+                    sx={{ mt: 3 }}
+                    fullWidth
+                    id="outlined-basic"
+                    type= 'number'
+                    name='stock'
+                    label="Stock"
+                    variant="outlined"
+                    onChange={handleChange}
+                    value={values.stock}
+                    error={errors.stock}
+                    helperText={errors.stock}
                      />
                 
                 </DialogContentText>

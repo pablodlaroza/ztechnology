@@ -4,13 +4,13 @@ import * as Yup from 'yup';
 import { TextField, Button } from '@mui/material';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
+import swal from 'sweetalert'
 
 const ChangePasswordForm = () => {
   const userString = localStorage.getItem('user');
   const user = userString ? JSON.parse(userString) : null;
 
   const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string().required('Este campo es obligatorio'),
     newPassword: Yup.string().required('Este campo es obligatorio'),
   });
 
@@ -24,7 +24,8 @@ const ChangePasswordForm = () => {
       const response = await axios.put('http://localhost:3000/api/users/updateUsers', updatedUser);
       console.log(response);
       setSubmitting(false);
-      alert('Contraseña cambiada exitosamente');
+      swal(`Contraseña cambiada exitosamente`,'', "success");
+
     } catch (error) {
       console.error(error);
       setSubmitting(false);
@@ -35,7 +36,6 @@ const ChangePasswordForm = () => {
   return (
     <Formik
       initialValues={{
-        oldPassword: '',
         newPassword: '',
       }}
       validationSchema={validationSchema}
@@ -52,21 +52,7 @@ const ChangePasswordForm = () => {
       }) => (
         <form style={{backgroundColor:'white', padding:'20px', marginBottom:'20px', borderRadius:'7px', width:'50%', marginLeft:'450px', marginTop:'220px'}} onSubmit={handleSubmit}>
            <h1 style={{textAlign:'center', fontWeight:'bolder', marginBottom:'20px'}}>Cambiar Contraseña</h1>
-          <TextField
-            
-            style={{ marginTop: '20px' }}
-            fullWidth
-            id='oldPassword'
-            name='oldPassword'
-            label='Contraseña actual'
-            type='password'
-            variant='outlined'
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.oldPassword}
-            error={touched.oldPassword && Boolean(errors.oldPassword)}
-            helperText={touched.oldPassword && errors.oldPassword}
-          />
+        
           <TextField
             style={{ marginTop: '20px' }}
             fullWidth

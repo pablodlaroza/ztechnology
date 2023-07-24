@@ -10,6 +10,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import swal from 'sweetalert'
+
 
 import Button from '@mui/material/Button';
 
@@ -74,6 +76,8 @@ function UpdateUser({ idUpdate, load, setLoad }) {
             };
 
             const response = await axios.put('http://localhost:3000/api/users/updateUsers', updatedUser);
+            swal(`Actualizado`,'', "success");
+
             setLoad(!load);
             setOpen(false);
           }}

@@ -4,7 +4,7 @@ import Clients from "../models/clients";
 import User from "../models/users";
 import Products from "../models/products";
 import QuoteProduct from "../models/quoteProduct";
-import { sendEmail } from './mailer'; // Asegúrate de importar el módulo de tu archivo mailer
+import UserDetails from "../models/userDetails";
 
 
 
@@ -51,12 +51,13 @@ export const consultQuotes = async (req: Request, res: Response) => {
               model: Clients
                // Incluir solo ciertos atributos de Clients
             },
-            {
-              model: User
-               // Incluir solo ciertos atributos de User
-            },
+          
+          
             {
               model:Products
+            },
+            {
+              model:UserDetails
             }
           ],
     }
@@ -78,7 +79,6 @@ export const consultQuoteById = async(req: Request, res: Response) => {
           },
           {
             model: User,
-             // Incluir solo ciertos atributos de User
           },
           {
             model:Products
@@ -97,22 +97,62 @@ export const consultQuoteById = async(req: Request, res: Response) => {
     }
 }
 
-export const saveQuotes = async(req: Request, res: Response) => {
+export const saveQuotes = async (req: Request, res: Response) => {
+    const { quoteNumber, idProduct, amount, description, idUser, idClient, shipping_cost, total } = req.body;
 
-    const {quoteNumber,idProduct, amount,description, idUser, idClient, shipping_cost, total} = req.body;
-    
+    try {
+        console.log('Cotizacion Registrada:', description);
 
-    console.log('Cotizacion Registrada:', description);
-    const quotes = await Quotes.create({
-        quoteNumber,idProduct,amount, description, idUser, idClient, shipping_cost, total
-    })
-    
+        // Obtener el producto relacionado con la cotización desde la base de datos
+        const product = await Products.findByPk(idProduct);
 
-    res.status(200).json({
-        msg: `Se ha registrado una cotizacion con el id: ${quotes.dataValues.id}`
-    })
-   
-}
+        if (!product) {
+            // Si el producto no existe, enviar una respuesta de error
+            return res.status(404).json({
+                msg: 'Producto no encontrado'
+            });
+        }
+
+        // Obtener el valor actual de stock del producto desde la base de datos
+        const currentStock = product.getDataValue("stock");
+
+        // Verificar si hay suficiente stock para crear la cotización
+        if (currentStock < amount) {
+            // Si el stock es insuficiente, enviar una respuesta de error
+            return res.status(400).json({
+                msg: 'Stock insuficiente para crear la cotización'
+            });
+        }
+
+        // Calcular el nuevo stock restando el valor de amount
+        const newStock = currentStock - amount;
+
+        // Actualizar el stock del producto en la base de datos
+        await Products.update({ stock: newStock }, { where: { id: idProduct } });
+
+        // Crear la cotización (Quote)
+        const quote = await Quotes.create({
+            quoteNumber,
+            idProduct,
+            amount,
+            description,
+            idUser,
+            idClient,
+            shipping_cost,
+            total
+        });
+
+        res.status(200).json({
+            msg: `Se ha registrado una cotizacion con el id: ${quote.dataValues.id}`
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Error al crear la cotizacion'
+        });
+    }
+};
+
 
 export const updateQuote = async(req: Request, res: Response) => {
     const {id, quoteNumber,idProduct,amount, description, idUser, idClient, shipping_cost, total} = req.body;
