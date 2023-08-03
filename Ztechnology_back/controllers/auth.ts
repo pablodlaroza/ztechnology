@@ -2,6 +2,7 @@ import User from "../models/users";
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';//En esta sección, se importan los módulos y las dependencias necesarias para el funcionamiento del código
 import bcrypt from 'bcryptjs';// se importa de Sequelize para usar operadores de comparación en las consultas.
+import generateJWT from "../helpers/generateJWS";
 
 const login = async (req: Request, res: Response) => {
 
@@ -69,6 +70,15 @@ const login = async (req: Request, res: Response) => {
         loginAttempts: 0,
         blockedUntil: null
       });
+
+      const token = await generateJWT(user.dataValues.id);
+            console.log(token);
+            return res.status(200).json({
+              msg:'ok',
+              token,
+              user: user
+              
+            })
 
       // console.log(user);
       return res.status(200).json({
